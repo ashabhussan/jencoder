@@ -29,7 +29,8 @@ import {
   Upload,
   Code2,
   HelpCircle,
-  CogIcon,
+  Cog,
+  TriangleAlert,
 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { algorithmConfig } from "@/config/theme";
@@ -487,8 +488,8 @@ const Index = () => {
                             </TooltipTrigger>
                             <TooltipContent>
                               <p>
-                                Used for signing JWT. Paste your private key
-                                starting with -----BEGIN PRIVATE KEY-----
+                                Used for signing JWT. Enter your private key in
+                                PKCS#8 format with minimum 2048 characters
                               </p>
                             </TooltipContent>
                           </Tooltip>
@@ -733,7 +734,7 @@ const Index = () => {
                   text-white shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02]"
                   size="default"
                 >
-                  <CogIcon className="h-4 w-4" />
+                  <Cog className="h-4 w-4" />
                   Generate JWT
                 </Button>
               </div>
@@ -818,27 +819,10 @@ const Index = () => {
               <Card className="border-0 shadow-md bg-gradient-to-r from-amber-50 to-yellow-50">
                 <CardContent className="pt-6">
                   <div className="flex items-start space-x-3">
-                    <div className="flex-shrink-0">
-                      <div
-                        className="w-8 h-8 bg-gradient-to-r from-amber-400 to-yellow-400 rounded-full 
-                        flex items-center justify-center shadow-sm"
-                      >
-                        <svg
-                          className="w-4 h-4 text-white"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                      </div>
-                    </div>
+                    <div className="flex-shrink-0"></div>
                     <div className="space-y-2">
-                      <p className="text-sm font-semibold text-amber-800">
-                        🔒 Security Notice
+                      <p className="text-sm font-semibold text-amber-800 flex items-center gap-2">
+                        <TriangleAlert className="h-4 w-4" /> Security Notice
                       </p>
                       <p className="text-sm text-amber-700 leading-relaxed">
                         All operations are performed locally in your browser.
