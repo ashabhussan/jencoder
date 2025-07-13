@@ -61,149 +61,12 @@ const EXP_OFFSETS = [
   { label: "Custom", value: -1 },
 ];
 
-const DEFAULT_PAYLOAD = JSON.stringify(
-  {
-    sub: "1234567890",
-    name: "John Doe",
-    role: "admin",
-  },
-  null,
-  2
-);
-
-const DEFAULT_RSA_PRIVATE_KEY = `-----BEGIN RSA PRIVATE KEY-----
-MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC7VJTUt9Us8cKB
-wko6piHwbI2BKzXHHJgJ7tBRTCLJG7lX0g8WYzIXXVXK+7o5kIDaOqzEwZK7s8Ux
-5Qx8xVXh1z6sD5GqKqGt1iQ+3AeKJ5n5RqXZq9Z7cYbPJZ0Lg4aq6bNnq7tE8KaZ
-KeA3B8KwzwCvNM0DqCW8+aq4A7+NZo8a7dBR2ZqK7bxW8z8cPg+tGQZO3aA4KQ==
------END RSA PRIVATE KEY-----`;
-
-// Helper function to normalize key format with proper line breaks
-const normalizePrivateKey = (key: string): string => {
-  const trimmedKey = key.trim();
-
-  // Add line breaks if missing
-  let normalizedKey = trimmedKey;
-  if (!normalizedKey.includes("\n")) {
-    if (normalizedKey.includes("-----BEGIN PRIVATE KEY-----")) {
-      normalizedKey = normalizedKey
-        .replace("-----BEGIN PRIVATE KEY-----", "-----BEGIN PRIVATE KEY-----\n")
-        .replace("-----END PRIVATE KEY-----", "\n-----END PRIVATE KEY-----");
-    } else if (normalizedKey.includes("-----BEGIN RSA PRIVATE KEY-----")) {
-      normalizedKey = normalizedKey
-        .replace(
-          "-----BEGIN RSA PRIVATE KEY-----",
-          "-----BEGIN RSA PRIVATE KEY-----\n"
-        )
-        .replace(
-          "-----END RSA PRIVATE KEY-----",
-          "\n-----END RSA PRIVATE KEY-----"
-        );
-    } else if (normalizedKey.includes("-----BEGIN EC PRIVATE KEY-----")) {
-      normalizedKey = normalizedKey
-        .replace(
-          "-----BEGIN EC PRIVATE KEY-----",
-          "-----BEGIN EC PRIVATE KEY-----\n"
-        )
-        .replace(
-          "-----END EC PRIVATE KEY-----",
-          "\n-----END EC PRIVATE KEY-----"
-        );
-    }
-  }
-
-  return normalizedKey;
-};
-
-// Helper function to import private key based on algorithm requirements
-const importPrivateKeyForAlgorithm = async (key: string, algorithm: string) => {
-  const normalizedKey = normalizePrivateKey(key);
-
-  try {
-    if (algorithm.startsWith("RS") || algorithm.startsWith("PS")) {
-      // RSA algorithms - try PKCS#1 first (preferred format), then PKCS#8
-      if (normalizedKey.includes("-----BEGIN RSA PRIVATE KEY-----")) {
-        // PKCS#1 format - this is the preferred format for RSA
-        return await importPKCS8(normalizedKey, algorithm);
-      } else if (normalizedKey.includes("-----BEGIN PRIVATE KEY-----")) {
-        // PKCS#8 format
-        return await importPKCS8(normalizedKey, algorithm);
-      } else {
-        throw new Error(
-          "RSA private key must be in PKCS#1 (-----BEGIN RSA PRIVATE KEY-----) or PKCS#8 (-----BEGIN PRIVATE KEY-----) format"
-        );
-      }
-    } else if (algorithm.startsWith("ES")) {
-      // ECDSA algorithms - try EC format first, then PKCS#8
-      if (normalizedKey.includes("-----BEGIN EC PRIVATE KEY-----")) {
-        // EC private key format - preferred for ECDSA
-        return await importPKCS8(normalizedKey, algorithm);
-      } else if (normalizedKey.includes("-----BEGIN PRIVATE KEY-----")) {
-        // PKCS#8 format
-        return await importPKCS8(normalizedKey, algorithm);
-      } else {
-        throw new Error(
-          "ECDSA private key must be in EC (-----BEGIN EC PRIVATE KEY-----) or PKCS#8 (-----BEGIN PRIVATE KEY-----) format"
-        );
-      }
-    } else if (algorithm === "EdDSA") {
-      // EdDSA algorithm - requires PKCS#8 format
-      if (normalizedKey.includes("-----BEGIN PRIVATE KEY-----")) {
-        return await importPKCS8(normalizedKey, algorithm);
-      } else {
-        throw new Error(
-          "EdDSA private key must be in PKCS#8 (-----BEGIN PRIVATE KEY-----) format"
-        );
-      }
-    } else {
-      throw new Error(`Unsupported algorithm: ${algorithm}`);
-    }
-  } catch (error) {
-    console.error("Key import error:", error);
-    throw new Error(getKeyFormatError(algorithm, normalizedKey, error));
-  }
-};
-
-// Helper function to provide specific error messages based on algorithm
-const getKeyFormatError = (
-  algorithm: string,
-  key: string,
-  originalError: any
-): string => {
-  const errorMessage = originalError?.message || "";
-
-  if (algorithm.startsWith("RS") || algorithm.startsWith("PS")) {
-    if (key.includes("-----BEGIN RSA PRIVATE KEY-----")) {
-      return `RSA ${algorithm}: PKCS#1 format detected but validation failed. Please ensure your RSA private key is valid. Error: ${errorMessage}`;
-    } else if (key.includes("-----BEGIN PRIVATE KEY-----")) {
-      return `RSA ${algorithm}: PKCS#8 format detected but validation failed. Please ensure your RSA private key is valid. Error: ${errorMessage}`;
-    } else {
-      return `RSA ${algorithm} requires a private key in PKCS#1 format (-----BEGIN RSA PRIVATE KEY-----) or PKCS#8 format (-----BEGIN PRIVATE KEY-----).`;
-    }
-  } else if (algorithm.startsWith("ES")) {
-    if (key.includes("-----BEGIN EC PRIVATE KEY-----")) {
-      return `ECDSA ${algorithm}: EC format detected but validation failed. Please ensure your EC private key is valid. Error: ${errorMessage}`;
-    } else if (key.includes("-----BEGIN PRIVATE KEY-----")) {
-      return `ECDSA ${algorithm}: PKCS#8 format detected but validation failed. Please ensure your EC private key is valid. Error: ${errorMessage}`;
-    } else {
-      return `ECDSA ${algorithm} requires a private key in EC format (-----BEGIN EC PRIVATE KEY-----) or PKCS#8 format (-----BEGIN PRIVATE KEY-----).`;
-    }
-  } else if (algorithm === "EdDSA") {
-    if (key.includes("-----BEGIN PRIVATE KEY-----")) {
-      return `EdDSA: PKCS#8 format detected but validation failed. Please ensure your EdDSA private key is valid. Error: ${errorMessage}`;
-    } else {
-      return `EdDSA requires a private key in PKCS#8 format (-----BEGIN PRIVATE KEY-----).`;
-    }
-  }
-
-  return `Unsupported algorithm or invalid key format for ${algorithm}. Error: ${errorMessage}`;
-};
-
 const Index = () => {
   const [config, setConfig] = useState<JWTConfig>({
     algorithm: DEFAULT_CONFIG.algorithm,
     payload: DEFAULT_CONFIG.payload,
     secret: DEFAULT_CONFIG.secret,
+    privateKey: DEFAULT_CONFIG.privateKey,
     publicKey: DEFAULT_CONFIG.publicKey,
     addIat: DEFAULT_CONFIG.addIat,
     addExp: DEFAULT_CONFIG.addExp,
@@ -263,7 +126,7 @@ const Index = () => {
     }
 
     try {
-      let parsedPayload = JSON.parse(config.payload);
+      const parsedPayload = JSON.parse(config.payload);
 
       // Add iat if enabled
       if (config.addIat) {
@@ -279,39 +142,37 @@ const Index = () => {
         parsedPayload.exp = Math.floor(Date.now() / 1000) + expiration;
       }
 
-      let token: string;
+      let secretOrPrivateKey: CryptoKey | Uint8Array;
 
+      // Handle different algorithm types
       if (config.algorithm.startsWith("HS")) {
         // HMAC algorithms
-        const secret = new TextEncoder().encode(config.secret);
-        const jwt = new SignJWT(parsedPayload)
-          .setProtectedHeader({ alg: config.algorithm as any })
-          .sign(secret);
-        token = await jwt;
+        const encoder = new TextEncoder();
+        secretOrPrivateKey = encoder.encode(config.secret);
       } else if (
         config.algorithm.startsWith("RS") ||
-        config.algorithm.startsWith("PS") ||
-        config.algorithm.startsWith("ES") ||
-        config.algorithm === "EdDSA"
+        config.algorithm.startsWith("PS")
       ) {
-        // Asymmetric algorithms with improved key handling
-        try {
-          const privateKey = await importPrivateKeyForAlgorithm(
-            config.secret,
-            config.algorithm
-          );
-
-          const jwt = new SignJWT(parsedPayload)
-            .setProtectedHeader({ alg: config.algorithm as any })
-            .sign(privateKey);
-          token = await jwt;
-        } catch (keyError) {
-          console.error("Key import error:", keyError);
-          throw keyError;
-        }
+        // RSA algorithms
+        secretOrPrivateKey = await importPKCS8(
+          config.privateKey,
+          config.algorithm
+        );
+      } else if (config.algorithm.startsWith("ES")) {
+        // ECDSA algorithms
+        secretOrPrivateKey = await importPKCS8(
+          config.privateKey,
+          config.algorithm
+        );
       } else {
         throw new Error(`Unsupported algorithm: ${config.algorithm}`);
       }
+
+      // Create the JWT
+      const token = await new SignJWT(parsedPayload)
+        .setProtectedHeader({ alg: config.algorithm, typ: "JWT" })
+        .setIssuedAt()
+        .sign(secretOrPrivateKey);
 
       setJwt(token);
 
@@ -635,9 +496,9 @@ const Index = () => {
                         <div className="relative">
                           <Textarea
                             id="privateKey"
-                            value={config.secret}
+                            value={config.privateKey}
                             onChange={e =>
-                              updateConfig({ secret: e.target.value })
+                              updateConfig({ privateKey: e.target.value })
                             }
                             className={`font-mono text-sm min-h-[100px] pr-12 bg-slate-50 border-slate-200 
                               focus:border-blue-500 focus:ring-blue-500/20 resize-none

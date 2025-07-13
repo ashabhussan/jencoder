@@ -10,6 +10,7 @@ export interface JWTConfig {
   algorithm: string;
   payload: string;
   secret: string;
+  privateKey: string;
   publicKey: string;
   addIat: boolean;
   addExp: boolean;
@@ -29,7 +30,8 @@ export const DEFAULT_CONFIG: JWTConfig = {
     2
   ),
   secret: "your-256-bit-secret",
-  publicKey: "",
+  privateKey: "your-2048-bit-pkcs8-private-key",
+  publicKey: "your-public-key",
   addIat: true,
   addExp: false,
   expOffset: 3600,
