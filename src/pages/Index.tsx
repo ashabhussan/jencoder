@@ -698,7 +698,7 @@ const Index = () => {
                       </div>
 
                       {config.addExp && (
-                        <div className="ml-6 space-y-3 p-3 bg-white rounded border border-green-200">
+                        <div className="ml-6 space-y-3 p-3 bg-white rounded border border-green-200 dark:bg-slate-800">
                           <Label
                             htmlFor="expOffset"
                             className="text-sm font-medium text-slate-600 dark:text-slate-300"
