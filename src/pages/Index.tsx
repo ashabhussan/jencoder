@@ -38,6 +38,7 @@ import {
   Github,
 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import ThemeToggle from "@/components/ThemeToggle";
 import { algorithmConfig } from "@/config/theme";
 import { STORAGE_KEYS, DEFAULT_CONFIG } from "@/config/app.config";
 
@@ -316,14 +317,18 @@ const Index = () => {
 
   return (
     <TooltipProvider>
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 py-10">
+      {/* Theme Toggle Button */}
+      <div className="fixed top-4 right-4 z-50">
+        <ThemeToggle />
+      </div>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-slate-800 py-10">
         <div className="max-w-7xl mx-auto space-y-6">
           {/* Header */}
           <div className="text-center space-y-3">
             <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
               Jencoder - JWT Encoder Tool
             </h1>
-            <p className="text-slate-600 text-lg">
+            <p className="text-slate-600 dark:text-slate-300 text-lg">
               Generate JWT tokens with various algorithms
             </p>
             <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto rounded-full"></div>
@@ -332,7 +337,7 @@ const Index = () => {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
             {/* Left Column - Configuration Panel */}
             <div className="space-y-4 lg:col-span-5">
-              <Card className="border-0 shadow-lg bg-white/80 backdrop-blur-sm">
+              <Card className="border-0 shadow-lg bg-white/80 dark:bg-white/10 backdrop-blur-sm">
                 <CardHeader className="bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-t-lg">
                   <CardTitle className="flex items-center justify-between">
                     <span className="flex items-center space-x-2">
@@ -379,7 +384,7 @@ const Index = () => {
                     <div className="flex items-center justify-between">
                       <Label
                         htmlFor="payload"
-                        className="text-sm font-semibold text-slate-700"
+                        className="text-sm font-semibold text-slate-700 dark:text-slate-200"
                       >
                         Payload (JSON)
                       </Label>
@@ -387,7 +392,7 @@ const Index = () => {
                         variant="outline"
                         size="sm"
                         onClick={fixAndPrettifyPayload}
-                        className="text-xs bg-slate-50 hover:bg-slate-100"
+                        className="text-xs bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700"
                         title="Attempt to auto-correct and format your payload"
                       >
                         <Code2 className="h-3 w-3 mr-1" />
@@ -396,9 +401,11 @@ const Index = () => {
                     </div>
                     <div className="relative">
                       <div
-                        className={`font-mono text-sm min-h-[120px] bg-slate-50 border rounded-md overflow-hidden
+                        className={`font-mono text-sm min-h-[120px] bg-slate-50 dark:bg-slate-800 border rounded-md overflow-hidden
                           ${
-                            payloadError ? "border-red-500" : "border-slate-200"
+                            payloadError
+                              ? "border-red-500"
+                              : "border-slate-200 dark:border-slate-700"
                           }`}
                       >
                         <Editor
@@ -411,12 +418,12 @@ const Index = () => {
                             highlight(code, languages.json, "json")
                           }
                           padding={10}
-                          className={`w-full min-h-[120px] bg-slate-50 font-mono text-sm
+                          className={`w-full min-h-[120px] bg-slate-50 dark:bg-slate-800 font-mono text-sm
                             focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500
                             ${
                               payloadError
                                 ? "border-red-500"
-                                : "border-slate-200"
+                                : "border-slate-200 dark:border-slate-700"
                             }`}
                           textareaClassName="focus:outline-none"
                           placeholder="Enter JWT payload as JSON..."
@@ -443,7 +450,7 @@ const Index = () => {
                       <div className="flex items-center space-x-2">
                         <Label
                           htmlFor="secret"
-                          className="text-sm font-semibold text-slate-700"
+                          className="text-sm font-semibold text-slate-700 dark:text-slate-200"
                         >
                           Secret
                         </Label>
@@ -466,7 +473,7 @@ const Index = () => {
                           onChange={e =>
                             updateConfig({ secret: e.target.value })
                           }
-                          className={`font-mono text-sm min-h-[100px] pr-12 bg-slate-50 border-slate-200 
+                          className={`font-mono text-sm min-h-[100px] pr-12 bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 
                             focus:border-blue-500 focus:ring-blue-500/20 resize-none
                             ${showSecret ? "" : "text-security-disc"}`}
                           style={
@@ -482,7 +489,7 @@ const Index = () => {
                           type="button"
                           variant="ghost"
                           size="sm"
-                          className="absolute right-2 top-2 hover:bg-slate-100"
+                          className="absolute right-2 top-2 hover:bg-slate-100 dark:hover:bg-slate-700"
                           onClick={() => setShowSecret(!showSecret)}
                         >
                           {showSecret ? (
@@ -501,7 +508,7 @@ const Index = () => {
                         <div className="flex items-center space-x-2">
                           <Label
                             htmlFor="privateKey"
-                            className="text-sm font-semibold text-slate-700"
+                            className="text-sm font-semibold text-slate-700 dark:text-slate-200"
                           >
                             Private Key
                           </Label>
@@ -524,7 +531,7 @@ const Index = () => {
                             onChange={e =>
                               updateConfig({ privateKey: e.target.value })
                             }
-                            className={`font-mono text-sm min-h-[100px] pr-12 bg-slate-50 border-slate-200 
+                            className={`font-mono text-sm min-h-[100px] pr-12 bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 
                               focus:border-blue-500 focus:ring-blue-500/20 resize-none
                               ${showSecret ? "" : "text-security-disc"}`}
                             style={
@@ -540,7 +547,7 @@ const Index = () => {
                             type="button"
                             variant="ghost"
                             size="sm"
-                            className="absolute right-2 top-2 hover:bg-slate-100"
+                            className="absolute right-2 top-2 hover:bg-slate-100 dark:hover:bg-slate-700"
                             onClick={() => setShowSecret(!showSecret)}
                           >
                             {showSecret ? (
@@ -557,7 +564,7 @@ const Index = () => {
                         <div className="flex items-center space-x-2">
                           <Label
                             htmlFor="publicKey"
-                            className="text-sm font-semibold text-slate-700"
+                            className="text-sm font-semibold text-slate-700 dark:text-slate-200"
                           >
                             Public Key (Optional)
                           </Label>
@@ -580,7 +587,7 @@ const Index = () => {
                             onChange={e =>
                               updateConfig({ publicKey: e.target.value })
                             }
-                            className={`font-mono text-sm min-h-[80px] pr-12 bg-slate-50 border-slate-200 
+                            className={`font-mono text-sm min-h-[80px] pr-12 bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 
                               focus:border-blue-500 focus:ring-blue-500/20 resize-none
                               ${showPublicKey ? "" : "text-security-disc"}`}
                             style={
@@ -596,7 +603,7 @@ const Index = () => {
                             type="button"
                             variant="ghost"
                             size="sm"
-                            className="absolute right-2 top-2 hover:bg-slate-100"
+                            className="absolute right-2 top-2 hover:bg-slate-100 dark:hover:bg-slate-700"
                             onClick={() => setShowPublicKey(!showPublicKey)}
                           >
                             {showPublicKey ? (
@@ -617,7 +624,7 @@ const Index = () => {
             <div className="space-y-6 lg:col-span-2">
               <div className="sticky top-4 space-y-6">
                 {/* Algorithm Selection */}
-                <Card className="border-0 shadow-lg bg-white/80 backdrop-blur-sm">
+                <Card className="border-0 shadow-lg bg-white/80 dark:bg-white/10 backdrop-blur-sm">
                   <CardHeader className="bg-gradient-to-r from-indigo-500 to-indigo-600 text-white rounded-t-lg py-3">
                     <CardTitle className="text-sm font-medium">
                       Algorithm
@@ -630,7 +637,7 @@ const Index = () => {
                         updateConfig({ algorithm: value })
                       }
                     >
-                      <SelectTrigger className="border-slate-200 focus:border-blue-500 focus:ring-blue-500/20">
+                      <SelectTrigger className="border-slate-200 dark:border-slate-700 focus:border-blue-500 focus:ring-blue-500/20">
                         <SelectValue placeholder="Select algorithm" />
                       </SelectTrigger>
                       <SelectContent>
@@ -654,7 +661,7 @@ const Index = () => {
                 </Card>
 
                 {/* Token Claims */}
-                <Card className="border-0 shadow-lg bg-white/80 backdrop-blur-sm">
+                <Card className="border-0 shadow-lg bg-white/80 dark:bg-white/10 backdrop-blur-sm">
                   <CardHeader className="bg-gradient-to-r from-indigo-500 to-indigo-600 text-white rounded-t-lg py-3">
                     <CardTitle className="text-sm font-medium">
                       Token Claims
@@ -694,7 +701,7 @@ const Index = () => {
                         <div className="ml-6 space-y-3 p-3 bg-white rounded border border-green-200">
                           <Label
                             htmlFor="expOffset"
-                            className="text-sm font-medium text-slate-600"
+                            className="text-sm font-medium text-slate-600 dark:text-slate-300"
                           >
                             Expiration time
                           </Label>
@@ -723,7 +730,7 @@ const Index = () => {
                             <div className="space-y-2">
                               <Label
                                 htmlFor="customExp"
-                                className="text-sm text-slate-600"
+                                className="text-sm text-slate-600 dark:text-slate-300"
                               >
                                 Custom expiration (minutes)
                               </Label>
@@ -765,7 +772,7 @@ const Index = () => {
 
             {/* Right Column - Results */}
             <div className="space-y-4 lg:col-span-5">
-              <Card className="border-0 shadow-lg bg-white/80 backdrop-blur-sm">
+              <Card className="border-0 shadow-lg bg-white/80 dark:bg-white/10 backdrop-blur-sm">
                 <CardHeader className="bg-gradient-to-r from-green-500 to-green-600 text-white rounded-t-lg">
                   <CardTitle className="flex items-center space-x-2">
                     <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center">
@@ -778,7 +785,7 @@ const Index = () => {
                   {/* JWT Output */}
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                      <Label className="text-sm font-semibold text-slate-700">
+                      <Label className="text-sm font-semibold text-slate-700 dark:text-slate-200">
                         Token
                       </Label>
                       {jwt && (
@@ -796,8 +803,8 @@ const Index = () => {
                     <Textarea
                       value={jwt}
                       readOnly
-                      className="font-mono text-sm min-h-[120px] bg-gradient-to-br from-slate-50 to-blue-50 
-                        border-slate-200 resize-none"
+                      className="font-mono text-sm min-h-[120px] dark:bg-slate-800
+                        border-slate-200 dark:border-slate-700 resize-none"
                       placeholder="Generated JWT will appear here..."
                     />
                   </div>
@@ -808,12 +815,12 @@ const Index = () => {
 
                       {/* Decoded Header */}
                       <div className="space-y-3">
-                        <Label className="text-sm font-semibold text-slate-700 flex items-center space-x-2">
+                        <Label className="text-sm font-semibold text-slate-700 dark:text-slate-200 flex items-center space-x-2">
                           <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
                           <span>Decoded Header</span>
                         </Label>
                         <div className="relative">
-                          <div className="font-mono text-sm min-h-[80px] bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-md overflow-hidden">
+                          <div className="font-mono text-sm min-h-[80px] bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-md overflow-hidden ">
                             <Editor
                               value={decodedHeader}
                               onValueChange={() => {}}
@@ -822,7 +829,7 @@ const Index = () => {
                               }
                               padding={10}
                               readOnly
-                              className="w-full min-h-[80px] bg-transparent font-mono text-sm pointer-events-none"
+                              className="w-full min-h-[80px] bg-transparent dark:bg-slate-800 font-mono text-sm pointer-events-none"
                               textareaClassName="focus:outline-none cursor-default"
                               style={{
                                 fontFamily:
@@ -837,12 +844,12 @@ const Index = () => {
 
                       {/* Decoded Payload */}
                       <div className="space-y-3">
-                        <Label className="text-sm font-semibold text-slate-700 flex items-center space-x-2">
+                        <Label className="text-sm font-semibold text-slate-700 dark:text-slate-200 flex items-center space-x-2">
                           <div className="w-3 h-3 bg-green-500 rounded-full"></div>
                           <span>Decoded Payload</span>
                         </Label>
                         <div className="relative">
-                          <div className="font-mono text-sm min-h-[120px] bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200 rounded-md overflow-hidden">
+                          <div className="font-mono text-sm min-h-[120px] bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900 dark:to-emerald-900 border border-green-200 rounded-md overflow-hidden">
                             <Editor
                               value={decodedPayload}
                               onValueChange={() => {}}
@@ -851,7 +858,7 @@ const Index = () => {
                               }
                               padding={10}
                               readOnly
-                              className="w-full min-h-[120px] bg-transparent font-mono text-sm pointer-events-none"
+                              className="w-full min-h-[120px] bg-transparent dark:bg-slate-800 font-mono text-sm pointer-events-none"
                               textareaClassName="focus:outline-none cursor-default"
                               style={{
                                 fontFamily:
@@ -869,7 +876,7 @@ const Index = () => {
               </Card>
 
               {/* Security Notice */}
-              <Card className="border-0 shadow-md bg-gradient-to-r from-amber-50 to-yellow-50">
+              <Card className="border-0 shadow-md bg-gradient-to-r from-amber-50 to-yellow-50 dark:from-amber-900 dark:to-yellow-900">
                 <CardContent className="pt-6">
                   <div className="flex items-start space-x-3">
                     <div className="flex-shrink-0"></div>
