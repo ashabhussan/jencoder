@@ -33,17 +33,10 @@ import {
 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { algorithmConfig } from "@/config/theme";
+import { STORAGE_KEYS, DEFAULT_CONFIG } from "@/config/app.config";
 
-interface JWTConfig {
-  algorithm: string;
-  payload: string;
-  secret: string;
-  publicKey?: string;
-  addIat: boolean;
-  addExp: boolean;
-  expOffset: number;
-  customExpMinutes?: number;
-}
+// Re-export JWTConfig from config
+import type { JWTConfig } from "@/config/app.config";
 
 const ALGORITHMS = [
   "HS256",
@@ -208,14 +201,14 @@ const getKeyFormatError = (
 
 const Index = () => {
   const [config, setConfig] = useState<JWTConfig>({
-    algorithm: "RS256",
-    payload: DEFAULT_PAYLOAD,
-    secret: DEFAULT_RSA_PRIVATE_KEY,
-    publicKey: "",
-    addIat: true,
-    addExp: false,
-    expOffset: 3600,
-    customExpMinutes: 60,
+    algorithm: DEFAULT_CONFIG.algorithm,
+    payload: DEFAULT_CONFIG.payload,
+    secret: DEFAULT_CONFIG.secret,
+    publicKey: DEFAULT_CONFIG.publicKey,
+    addIat: DEFAULT_CONFIG.addIat,
+    addExp: DEFAULT_CONFIG.addExp,
+    expOffset: DEFAULT_CONFIG.expOffset,
+    customExpMinutes: DEFAULT_CONFIG.customExpMinutes,
   });
 
   const [jwt, setJwt] = useState("");
@@ -227,7 +220,7 @@ const Index = () => {
 
   // Load config from localStorage on mount
   useEffect(() => {
-    const savedConfig = localStorage.getItem("jwt-dev-tool-config");
+    const savedConfig = localStorage.getItem(STORAGE_KEYS.JWT_DEV_TOOL_CONFIG);
     if (savedConfig) {
       try {
         const parsed = JSON.parse(savedConfig);
@@ -240,7 +233,7 @@ const Index = () => {
 
   // Save config to localStorage whenever it changes
   useEffect(() => {
-    localStorage.setItem("jwt-dev-tool-config", JSON.stringify(config));
+    localStorage.setItem(STORAGE_KEYS.JWT_DEV_TOOL_CONFIG, JSON.stringify(config));
   }, [config]);
 
   // Validate JSON payload
