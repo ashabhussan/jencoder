@@ -4,6 +4,7 @@
 
 export const STORAGE_KEYS = {
   JWT_DEV_TOOL_CONFIG: "jencoder-config",
+  THEME: "jencoder-theme",
 } as const;
 
 export interface JWTConfig {

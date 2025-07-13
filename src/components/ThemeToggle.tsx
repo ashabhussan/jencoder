@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Sun, Moon } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
+import { STORAGE_KEYS } from "@/config/app.config";
 
 /**
  * A simple Dark/Light mode toggle button that:
@@ -8,15 +8,19 @@ import { Button } from "@/components/ui/button";
  * 2. Applies or removes the `dark` class on the document's `<html>` element.
  * 3. Persists the user's choice back to `localStorage` so that it survives reloads.
  */
-const STORAGE_KEY = "theme" as const;
 
 const ThemeToggle: React.FC = () => {
   const [isDark, setIsDark] = useState<boolean>(false);
 
   // Apply the theme on mount
   useEffect(() => {
-    const saved = localStorage.getItem(STORAGE_KEY) as "light" | "dark" | null;
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const saved = localStorage.getItem(STORAGE_KEYS.THEME) as
+      | "light"
+      | "dark"
+      | null;
+    const prefersDark = window.matchMedia(
+      "(prefers-color-scheme: dark)"
+    ).matches;
     const shouldUseDark = saved ? saved === "dark" : prefersDark;
     setIsDark(shouldUseDark);
     syncHtmlClass(shouldUseDark);
@@ -34,23 +38,21 @@ const ThemeToggle: React.FC = () => {
     }
   };
 
-  const toggleTheme = () => {
-    const next = !isDark;
-    setIsDark(next);
-    syncHtmlClass(next);
-    localStorage.setItem(STORAGE_KEY, next ? "dark" : "light");
+  const toggleTheme = (checked: boolean) => {
+    setIsDark(checked);
+    syncHtmlClass(checked);
+    localStorage.setItem(STORAGE_KEYS.THEME, checked ? "dark" : "light");
   };
 
   return (
-    <Button
-      variant="ghost"
-      size="icon"
-      aria-label="Toggle theme"
-      onClick={toggleTheme}
-      className="rounded-full border border-border hover:bg-accent hover:text-accent-foreground"
-    >
-      {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-    </Button>
+    <div className="flex items-center space-x-2">
+      <Switch
+        checked={isDark}
+        onCheckedChange={toggleTheme}
+        aria-label="Toggle theme"
+        className="data-[state=checked]:bg-yellow-500 data-[state=unchecked]:bg-slate-600"
+      />
+    </div>
   );
 };
 
