@@ -728,15 +728,58 @@ const Index = () => {
                       </div>
                     </div>
                   )}
+                </CardContent>
+              </Card>
+            </div>
 
-                  {/* IAT and EXP Controls */}
+            {/* Middle Column */}
+            <div className="space-y-6 lg:col-span-2">
+              <div className="sticky top-4 space-y-6">
+                {/* Algorithm Selection */}
+                <Card className="border-0 shadow-lg bg-white/80 backdrop-blur-sm">
+                  <CardHeader className="bg-gradient-to-r from-indigo-500 to-indigo-600 text-white rounded-t-lg py-3">
+                    <CardTitle className="text-sm font-medium">
+                      Algorithm
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-4 space-y-3">
+                    <Select
+                      value={config.algorithm}
+                      onValueChange={value =>
+                        updateConfig({ algorithm: value })
+                      }
+                    >
+                      <SelectTrigger className="border-slate-200 focus:border-blue-500 focus:ring-blue-500/20">
+                        <SelectValue placeholder="Select algorithm" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {ALGORITHMS.map(alg => (
+                          <SelectItem
+                            key={alg}
+                            value={alg}
+                            className="hover:bg-blue-50"
+                          >
+                            <div className="flex flex-col font-medium">
+                              {alg}
+                            </div>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <p className="text-xs text-slate-500">
+                      {getAlgorithmInfo().description}
+                    </p>
+                  </CardContent>
+                </Card>
 
-                  {/* IAT and EXP Controls */}
-                  <div className="space-y-4 bg-gradient-to-r from-green-50 to-emerald-50 p-4 rounded-lg border border-green-100">
-                    <Label className="text-sm font-semibold text-slate-700">
+                {/* Token Claims */}
+                <Card className="border-0 shadow-lg bg-white/80 backdrop-blur-sm">
+                  <CardHeader className="bg-gradient-to-r from-indigo-500 to-indigo-600 text-white rounded-t-lg py-3">
+                    <CardTitle className="text-sm font-medium">
                       Token Claims
-                    </Label>
-
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-4 space-y-3">
                     <div className="space-y-3">
                       <div className="flex items-center space-x-3">
                         <Checkbox
@@ -822,48 +865,6 @@ const Index = () => {
                         </div>
                       )}
                     </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Middle Column - Algorithm Selection */}
-            <div className="space-y-6 lg:col-span-2">
-              <div className="sticky top-4 space-y-6">
-                {/* Algorithm Selection */}
-                <Card className="border-0 shadow-lg bg-white/80 backdrop-blur-sm">
-                  <CardHeader className="bg-gradient-to-r from-indigo-500 to-indigo-600 text-white rounded-t-lg py-3">
-                    <CardTitle className="text-sm font-medium">
-                      Algorithm
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="p-4 space-y-3">
-                    <Select
-                      value={config.algorithm}
-                      onValueChange={value =>
-                        updateConfig({ algorithm: value })
-                      }
-                    >
-                      <SelectTrigger className="border-slate-200 focus:border-blue-500 focus:ring-blue-500/20">
-                        <SelectValue placeholder="Select algorithm" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {ALGORITHMS.map(alg => (
-                          <SelectItem
-                            key={alg}
-                            value={alg}
-                            className="hover:bg-blue-50"
-                          >
-                            <div className="flex flex-col font-medium">
-                              {alg}
-                            </div>
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <p className="text-xs text-slate-500">
-                      {getAlgorithmInfo().description}
-                    </p>
                   </CardContent>
                 </Card>
 
