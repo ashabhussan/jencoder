@@ -231,7 +231,7 @@ const Index = () => {
     const url = URL.createObjectURL(configBlob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "jwt-config.json";
+    a.download = "jencoder-config.json";
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -351,20 +351,23 @@ const Index = () => {
                         <Download className="h-4 w-4 mr-1" />
                         Export
                       </Button>
-                      <div className="relative">
-                        <input
-                          type="file"
-                          accept=".json"
-                          onChange={importConfig}
-                          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                        />
+                      <div className="relative inline-block">
                         <Button
+                          asChild
                           variant="outline"
                           size="sm"
-                          className="bg-white/10 border-white/20 text-white hover:bg-white/20"
+                          className="bg-white/10 border-white/20 text-white hover:bg-white/20 cursor-pointer relative"
                         >
-                          <Upload className="h-4 w-4 mr-1" />
-                          Import
+                          <label className="cursor-pointer">
+                            <Upload className="h-4 w-4 mr-1" />
+                            Import
+                            <input
+                              type="file"
+                              accept=".json"
+                              onChange={importConfig}
+                              className="hidden"
+                            />
+                          </label>
                         </Button>
                       </div>
                     </div>
@@ -814,13 +817,16 @@ const Index = () => {
                             <Editor
                               value={decodedHeader}
                               onValueChange={() => {}}
-                              highlight={code => highlight(code, languages.json, "json")}
+                              highlight={code =>
+                                highlight(code, languages.json, "json")
+                              }
                               padding={10}
                               readOnly
                               className="w-full min-h-[80px] bg-transparent font-mono text-sm pointer-events-none"
                               textareaClassName="focus:outline-none cursor-default"
                               style={{
-                                fontFamily: '"Fira code", "Fira Mono", monospace',
+                                fontFamily:
+                                  '"Fira code", "Fira Mono", monospace',
                                 fontSize: "0.875rem",
                                 lineHeight: "1.5",
                               }}
@@ -840,13 +846,16 @@ const Index = () => {
                             <Editor
                               value={decodedPayload}
                               onValueChange={() => {}}
-                              highlight={code => highlight(code, languages.json, "json")}
+                              highlight={code =>
+                                highlight(code, languages.json, "json")
+                              }
                               padding={10}
                               readOnly
                               className="w-full min-h-[120px] bg-transparent font-mono text-sm pointer-events-none"
                               textareaClassName="focus:outline-none cursor-default"
                               style={{
-                                fontFamily: '"Fira code", "Fira Mono", monospace',
+                                fontFamily:
+                                  '"Fira code", "Fira Mono", monospace',
                                 fontSize: "0.875rem",
                                 lineHeight: "1.5",
                               }}
