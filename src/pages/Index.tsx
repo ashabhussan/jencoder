@@ -27,12 +27,12 @@ import {
   Copy,
   Download,
   Upload,
-  RefreshCw,
   Code2,
   HelpCircle,
+  CogIcon,
 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
-import { theme, algorithmConfig } from "@/config/theme";
+import { algorithmConfig } from "@/config/theme";
 
 interface JWTConfig {
   algorithm: string;
@@ -454,7 +454,7 @@ const Index = () => {
 
   return (
     <TooltipProvider>
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 pt-10">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 py-10">
         <div className="max-w-7xl mx-auto space-y-6">
           {/* Header */}
           <div className="text-center space-y-3">
@@ -872,11 +872,11 @@ const Index = () => {
                 <Button
                   onClick={generateJWT}
                   disabled={!!payloadError}
-                  className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 
+                  className="w-full h-16 text-lg font-bold bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 
                   text-white shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02]"
                   size="default"
                 >
-                  <Code2 className="h-4 w-4 mr-2" />
+                  <CogIcon className="h-4 w-4" />
                   Generate JWT
                 </Button>
               </div>
