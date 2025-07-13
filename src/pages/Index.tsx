@@ -233,7 +233,10 @@ const Index = () => {
 
   // Save config to localStorage whenever it changes
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEYS.JWT_DEV_TOOL_CONFIG, JSON.stringify(config));
+    localStorage.setItem(
+      STORAGE_KEYS.JWT_DEV_TOOL_CONFIG,
+      JSON.stringify(config)
+    );
   }, [config]);
 
   // Validate JSON payload
@@ -452,10 +455,10 @@ const Index = () => {
           {/* Header */}
           <div className="text-center space-y-3">
             <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              JWT Developer Tool
+              Jencoder - JWT Encoder Tool
             </h1>
             <p className="text-slate-600 text-lg">
-              Generate and decode JWT tokens with various algorithms
+              Generate JWT tokens with various algorithms
             </p>
             <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto rounded-full"></div>
           </div>
