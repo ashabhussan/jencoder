@@ -454,8 +454,8 @@ const Index = () => {
 
   return (
     <TooltipProvider>
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-4">
-        <div className="max-w-6xl mx-auto space-y-6">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 pt-10">
+        <div className="max-w-7xl mx-auto space-y-6">
           {/* Header */}
           <div className="text-center space-y-3">
             <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
@@ -791,7 +791,7 @@ const Index = () => {
                           className="border-green-300 data-[state=checked]:bg-green-500"
                         />
                         <Label htmlFor="iat" className="text-sm cursor-pointer">
-                          Add issued at (iat) claim
+                          Add issued at (iat)
                         </Label>
                       </div>
 
@@ -805,7 +805,7 @@ const Index = () => {
                           className="border-green-300 data-[state=checked]:bg-green-500"
                         />
                         <Label htmlFor="exp" className="text-sm cursor-pointer">
-                          Add expiration (exp) claim
+                          Add expire at (exp)
                         </Label>
                       </div>
 
