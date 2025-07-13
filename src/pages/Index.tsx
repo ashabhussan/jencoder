@@ -467,9 +467,9 @@ const Index = () => {
             <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto rounded-full"></div>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Configuration Panel */}
-            <div className="space-y-4">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            {/* Left Column - Configuration Panel */}
+            <div className="space-y-4 lg:col-span-5">
               <Card className="border-0 shadow-lg bg-white/80 backdrop-blur-sm">
                 <CardHeader className="bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-t-lg">
                   <CardTitle className="flex items-center justify-between">
@@ -509,49 +509,6 @@ const Index = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6 p-6">
-                  {/* Algorithm Selection */}
-                  <div className="space-y-3">
-                    <Label
-                      htmlFor="algorithm"
-                      className="text-sm font-semibold text-slate-700"
-                    >
-                      Algorithm
-                    </Label>
-                    <Select
-                      value={config.algorithm}
-                      onValueChange={value =>
-                        updateConfig({ algorithm: value })
-                      }
-                    >
-                      <SelectTrigger className="border-slate-200 focus:border-blue-500 focus:ring-blue-500/20">
-                        <SelectValue placeholder="Select algorithm" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {ALGORITHMS.map(alg => (
-                          <SelectItem
-                            key={alg}
-                            value={alg}
-                            className="hover:bg-blue-50"
-                          >
-                            <div className="flex flex-col">
-                              <span className="font-medium">{alg}</span>
-                              <span className="text-xs text-slate-500">
-                                {
-                                  algorithmConfig[
-                                    alg as keyof typeof algorithmConfig
-                                  ]?.description
-                                }
-                              </span>
-                            </div>
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <p className="text-xs text-slate-500">
-                      {getAlgorithmInfo().description}
-                    </p>
-                  </div>
-
                   {/* Payload Editor */}
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
@@ -772,19 +729,7 @@ const Index = () => {
                     </div>
                   )}
 
-                  {/* Generate Button */}
-                  <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-lg border border-blue-100">
-                    <Button
-                      onClick={generateJWT}
-                      disabled={!!payloadError}
-                      className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 
-                      text-white shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02]"
-                      size="lg"
-                    >
-                      <Code2 className="h-5 w-5 mr-2" />
-                      Generate JWT Token
-                    </Button>
-                  </div>
+                  {/* IAT and EXP Controls */}
 
                   {/* IAT and EXP Controls */}
                   <div className="space-y-4 bg-gradient-to-r from-green-50 to-emerald-50 p-4 rounded-lg border border-green-100">
@@ -882,8 +827,62 @@ const Index = () => {
               </Card>
             </div>
 
-            {/* Output Panel */}
-            <div className="space-y-4">
+            {/* Middle Column - Algorithm Selection */}
+            <div className="space-y-6 lg:col-span-2">
+              <div className="sticky top-4 space-y-6">
+                {/* Algorithm Selection */}
+                <Card className="border-0 shadow-lg bg-white/80 backdrop-blur-sm">
+                  <CardHeader className="bg-gradient-to-r from-indigo-500 to-indigo-600 text-white rounded-t-lg py-3">
+                    <CardTitle className="text-sm font-medium">
+                      Algorithm
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-4 space-y-3">
+                    <Select
+                      value={config.algorithm}
+                      onValueChange={value =>
+                        updateConfig({ algorithm: value })
+                      }
+                    >
+                      <SelectTrigger className="border-slate-200 focus:border-blue-500 focus:ring-blue-500/20">
+                        <SelectValue placeholder="Select algorithm" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {ALGORITHMS.map(alg => (
+                          <SelectItem
+                            key={alg}
+                            value={alg}
+                            className="hover:bg-blue-50"
+                          >
+                            <div className="flex flex-col font-medium">
+                              {alg}
+                            </div>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <p className="text-xs text-slate-500">
+                      {getAlgorithmInfo().description}
+                    </p>
+                  </CardContent>
+                </Card>
+
+                {/* Generate Button */}
+                <Button
+                  onClick={generateJWT}
+                  disabled={!!payloadError}
+                  className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 
+                  text-white shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02]"
+                  size="default"
+                >
+                  <Code2 className="h-4 w-4 mr-2" />
+                  Generate JWT
+                </Button>
+              </div>
+            </div>
+
+            {/* Right Column - Results */}
+            <div className="space-y-4 lg:col-span-5">
               <Card className="border-0 shadow-lg bg-white/80 backdrop-blur-sm">
                 <CardHeader className="bg-gradient-to-r from-green-500 to-green-600 text-white rounded-t-lg">
                   <CardTitle className="flex items-center space-x-2">
