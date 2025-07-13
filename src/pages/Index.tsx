@@ -31,12 +31,12 @@ import {
   HelpCircle,
   Cog,
   TriangleAlert,
+  Github,
 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { algorithmConfig } from "@/config/theme";
 import { STORAGE_KEYS, DEFAULT_CONFIG } from "@/config/app.config";
 
-// Re-export JWTConfig from config
 import type { JWTConfig } from "@/config/app.config";
 
 const ALGORITHMS = [
@@ -837,6 +837,22 @@ const Index = () => {
             </div>
           </div>
         </div>
+
+        {/* Footer */}
+        <footer className="text-center text-sm text-muted-foreground mt-5">
+          <div className="container mx-auto px-4">
+            <p className="mb-2">👨‍💻 Built by developers, for developers 👩‍💻</p>
+            <a
+              href="https://github.com/ashabhussan/jencoder"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary hover:underline inline-flex items-center"
+            >
+              <Github className="h-4 w-4 mr-1" />
+              View on GitHub - Report Issues & Contribute
+            </a>
+          </div>
+        </footer>
       </div>
     </TooltipProvider>
   );
