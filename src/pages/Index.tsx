@@ -15,6 +15,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
+import Editor from "react-simple-code-editor";
+import { highlight, languages } from "prismjs";
+import "prismjs/components/prism-json";
+import "prismjs/themes/prism-tomorrow.css";
 import {
   Tooltip,
   TooltipContent,
@@ -388,22 +392,38 @@ const Index = () => {
                       </Button>
                     </div>
                     <div className="relative">
-                      <Textarea
-                        id="payload"
-                        value={config.payload}
-                        onChange={e => {
-                          updateConfig({ payload: e.target.value });
-                          validatePayload(e.target.value);
-                        }}
-                        className={`font-mono text-sm min-h-[120px] bg-slate-50 border-slate-200 
-                          focus:border-blue-500 focus:ring-blue-500/20 resize-none
+                      <div
+                        className={`font-mono text-sm min-h-[120px] bg-slate-50 border rounded-md overflow-hidden
                           ${
-                            payloadError
-                              ? "border-red-500 focus:border-red-500 focus:ring-red-500/20"
-                              : ""
+                            payloadError ? "border-red-500" : "border-slate-200"
                           }`}
-                        placeholder="Enter JWT payload as JSON..."
-                      />
+                      >
+                        <Editor
+                          value={config.payload}
+                          onValueChange={code => {
+                            updateConfig({ payload: code });
+                            validatePayload(code);
+                          }}
+                          highlight={code =>
+                            highlight(code, languages.json, "json")
+                          }
+                          padding={10}
+                          className={`w-full min-h-[120px] bg-slate-50 font-mono text-sm
+                            focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500
+                            ${
+                              payloadError
+                                ? "border-red-500"
+                                : "border-slate-200"
+                            }`}
+                          textareaClassName="focus:outline-none"
+                          placeholder="Enter JWT payload as JSON..."
+                          style={{
+                            fontFamily: '"Fira code", "Fira Mono", monospace',
+                            fontSize: "0.875rem",
+                            lineHeight: "1.5",
+                          }}
+                        />
+                      </div>
                     </div>
                     {payloadError && (
                       <div className="flex items-center space-x-2 text-sm text-red-600 bg-red-50 p-2 rounded border border-red-200">
@@ -789,12 +809,24 @@ const Index = () => {
                           <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
                           <span>Decoded Header</span>
                         </Label>
-                        <Textarea
-                          value={decodedHeader}
-                          readOnly
-                          className="font-mono text-sm min-h-[80px] bg-gradient-to-br from-blue-50 to-indigo-50 
-                            border-blue-200 resize-none"
-                        />
+                        <div className="relative">
+                          <div className="font-mono text-sm min-h-[80px] bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-md overflow-hidden">
+                            <Editor
+                              value={decodedHeader}
+                              onValueChange={() => {}}
+                              highlight={code => highlight(code, languages.json, "json")}
+                              padding={10}
+                              readOnly
+                              className="w-full min-h-[80px] bg-transparent font-mono text-sm pointer-events-none"
+                              textareaClassName="focus:outline-none cursor-default"
+                              style={{
+                                fontFamily: '"Fira code", "Fira Mono", monospace',
+                                fontSize: "0.875rem",
+                                lineHeight: "1.5",
+                              }}
+                            />
+                          </div>
+                        </div>
                       </div>
 
                       {/* Decoded Payload */}
@@ -803,12 +835,24 @@ const Index = () => {
                           <div className="w-3 h-3 bg-green-500 rounded-full"></div>
                           <span>Decoded Payload</span>
                         </Label>
-                        <Textarea
-                          value={decodedPayload}
-                          readOnly
-                          className="font-mono text-sm min-h-[120px] bg-gradient-to-br from-green-50 to-emerald-50 
-                            border-green-200 resize-none"
-                        />
+                        <div className="relative">
+                          <div className="font-mono text-sm min-h-[120px] bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200 rounded-md overflow-hidden">
+                            <Editor
+                              value={decodedPayload}
+                              onValueChange={() => {}}
+                              highlight={code => highlight(code, languages.json, "json")}
+                              padding={10}
+                              readOnly
+                              className="w-full min-h-[120px] bg-transparent font-mono text-sm pointer-events-none"
+                              textareaClassName="focus:outline-none cursor-default"
+                              style={{
+                                fontFamily: '"Fira code", "Fira Mono", monospace',
+                                fontSize: "0.875rem",
+                                lineHeight: "1.5",
+                              }}
+                            />
+                          </div>
+                        </div>
                       </div>
                     </>
                   )}
