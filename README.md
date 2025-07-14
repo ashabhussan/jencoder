@@ -1,6 +1,6 @@
 # Jencoder – JWT Encoder Tool
 
-[![GitHub Stars](https://img.shields.io/github/stars/your-org/Jencoder?style=social)](https://github.com/your-org/Jencoder)
+[![GitHub Stars](https://img.shields.io/github/stars/ashabhussan/jencoder?style=social)](https://github.com/ashabhussan/jencoder)
 [![MIT License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
 <!-- Add more badges as needed -->
