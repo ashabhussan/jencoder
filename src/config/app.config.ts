@@ -17,6 +17,7 @@ export interface JWTConfig {
   addExp: boolean;
   expOffset: number;
   customExpMinutes: number;
+  includeBearer: boolean;
 }
 
 export const DEFAULT_CONFIG: JWTConfig = {
@@ -33,8 +34,9 @@ export const DEFAULT_CONFIG: JWTConfig = {
   secret: "your-256-bit-secret",
   privateKey: "your-2048-bit-pkcs8-private-key",
   publicKey: "your-public-key",
-  addIat: true,
+  addIat: false,
   addExp: false,
-  expOffset: 3600,
+  expOffset: 0,
   customExpMinutes: 60,
+  includeBearer: true,
 };

@@ -78,6 +78,7 @@ const Index = () => {
     addExp: DEFAULT_CONFIG.addExp,
     expOffset: DEFAULT_CONFIG.expOffset,
     customExpMinutes: DEFAULT_CONFIG.customExpMinutes,
+    includeBearer: DEFAULT_CONFIG.includeBearer,
   });
 
   const [jwt, setJwt] = useState("");
@@ -180,9 +181,12 @@ const Index = () => {
         .setIssuedAt()
         .sign(secretOrPrivateKey);
 
-      setJwt(token);
+      // Add Bearer prefix if enabled
+      const formattedToken = config.includeBearer ? `Bearer ${token}` : token;
 
-      // Decode for display
+      setJwt(formattedToken);
+
+      // Decode for display (use original token without Bearer for decoding)
       const parts = token.split(".");
       const header = JSON.parse(atob(parts[0]));
       const payload = JSON.parse(atob(parts[1]));
@@ -752,6 +756,33 @@ const Index = () => {
                           )}
                         </div>
                       )}
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Token Format */}
+                <Card className="border-0 shadow-lg bg-white/80 dark:bg-white/10 backdrop-blur-sm">
+                  <CardHeader className="bg-gradient-to-r from-indigo-500 to-indigo-600 text-white rounded-t-lg py-3">
+                    <CardTitle className="text-sm font-medium">
+                      Token Format
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-4 space-y-3">
+                    <div className="flex items-center space-x-3">
+                      <Checkbox
+                        id="includeBearer"
+                        checked={config.includeBearer}
+                        onCheckedChange={checked =>
+                          updateConfig({ includeBearer: checked as boolean })
+                        }
+                        className="border-green-300 data-[state=checked]:bg-green-500"
+                      />
+                      <Label
+                        htmlFor="includeBearer"
+                        className="text-sm cursor-pointer"
+                      >
+                        Include <code>Bearer</code>
+                      </Label>
                     </div>
                   </CardContent>
                 </Card>
